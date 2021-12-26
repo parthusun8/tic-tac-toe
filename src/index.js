@@ -65,7 +65,8 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    if(calculateWinner(squares) || squares[i]){
+    
+    if(calculateWinner(squares) ||squares[i]){
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
@@ -102,10 +103,11 @@ class Game extends React.Component {
     })
 
     let status;
+    status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     if(winner){
       status = 'Winner: ' + winner;
-    } else{
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    } else if(check_draw(current.squares)){
+      status = 'Draw, Try Again!!';
     }
 
     return (
@@ -150,5 +152,19 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+function check_draw(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+  ];
+  for(let i=0; i < lines.length; i++) {
+    const [a,b,c] = lines[i];
+    if(!squares[a] || !squares[b] || !squares[c]) {
+      return null;
+    }
+  }
+  return "NotDraw";
 }
   
